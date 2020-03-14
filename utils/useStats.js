@@ -12,7 +12,7 @@ const useStats = url => {
       const data = await fetch(url)
         .then(res => {
           if (res.status >= 400 && res.status < 600) {
-            throw 'Country not available right now'
+            throw 'The data for this country not available right now'
           }
           return res.json()
         })

@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react'
+import { createGlobalStyle } from 'styled-components'
 
-import useStats from '../utils/useStats'
-import Stats from '../components/Stats'
 import CountrySelector from '../components/CountrySelector'
+import Stats from '../components/Stats'
+import useStats from '../utils/useStats'
+
+const GlobalStyle = createGlobalStyle`
+  html {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+`
 
 const IndexPage = () => {
   const [country, setCountry] = useState({
-    name: 'worldwide',
+    name: 'Worldwide',
     code: 'worldwide',
   })
   const baseUrl = 'https://covid19.mathdro.id/api'
@@ -24,6 +31,7 @@ const IndexPage = () => {
 
   return (
     <>
+      <GlobalStyle />
       <CountrySelector handleCountrySelect={handleCountrySelect} />
       <Stats
         country={country.code}
