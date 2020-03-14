@@ -1,19 +1,38 @@
 import useStats from '../utils/useStats'
 
-const Stats = () => {
-  const stats = useStats('https://covid19.mathdro.id/api')
+const Stats = ({ country, countryName, baseUrl }) => {
+  const { stats, loading, error } =
+    country === 'worldwide'
+      ? useStats(baseUrl)
+      : useStats(`${baseUrl}/countries/${country}`)
+
+  if (error) {
+    return (
+      <div>
+        <h2>Error: </h2>
+        <span>{error}</span>
+      </div>
+    )
+  }
+
   return (
     <>
-      {!stats && <p>Loading...</p>}
-      {stats && (
+      {loading && <p>Loading...</p>}
+      {stats && !loading && (
         <>
-          <h1>Stats:</h1>
-          <h2>Confirmed: </h2>
-          <span>{stats.confirmed.value}</span>
-          <h2>Recovered: </h2>
-          <span>{stats.recovered.value}</span>
-          <h2>Deaths: </h2>
-          <span>{stats.deaths.value}</span>
+          <h2>Stats for {countryName}:</h2>
+          <div>
+            <strong>Confirmed: </strong>
+            <span>{stats.confirmed.value}</span>
+          </div>
+          <div>
+            <strong>Recovered: </strong>
+            <span>{stats.recovered.value}</span>
+          </div>
+          <div>
+            <strong>Deaths: </strong>
+            <span>{stats.deaths.value}</span>
+          </div>
         </>
       )}
     </>

@@ -2,15 +2,36 @@ import { useState, useEffect } from 'react'
 
 const useStats = url => {
   const [stats, setStats] = useState()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState()
+
   useEffect(() => {
     async function fetchData() {
-      console.log('Fetching data')
-      const data = await fetch(url).then(data => data.json())
-      setStats(data)
+      setLoading(true)
+      setError()
+      const data = await fetch(url)
+        .then(res => {
+          if (res.status >= 400 && res.status < 600) {
+            throw 'Country not available right now'
+          }
+          return res.json()
+        })
+        .then(data => {
+          setStats(data)
+        })
+        .catch(err => {
+          setError(err)
+        })
+      setLoading(false)
     }
     fetchData()
-  }, [stats])
-  return stats
+  }, [url])
+
+  return {
+    stats,
+    loading,
+    error,
+  }
 }
 
 export default useStats
