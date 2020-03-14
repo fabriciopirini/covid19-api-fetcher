@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import useStats from '../utils/useStats'
+import CountrySelector from './CountrySelector'
 
 const StatGrid = styled.div`
   display: grid;
@@ -19,8 +20,19 @@ const StatBlock = styled.div`
   text-align: center;
 `
 
-const Stats = ({ country, countryName, baseUrl }) => {
-  const Header = () => <h1>Cases of Coronavirus ({countryName})</h1>
+const Stats = ({ country, countryName, baseUrl, handleCountrySelect }) => {
+  const Error = ({ error }) => (
+    <>
+      <h2>Error</h2>
+      <span>{error}</span>
+    </>
+  )
+
+  const Loading = () => (
+    <>
+      <h2>Loading...</h2>
+    </>
+  )
 
   const { stats, loading, error } =
     country === 'worldwide'
@@ -28,21 +40,14 @@ const Stats = ({ country, countryName, baseUrl }) => {
       : useStats(`${baseUrl}/countries/${country}`)
 
   if (error) {
-    return (
-      <div>
-        <Header />
-        <h2>Error</h2>
-        <span>{error}</span>
-      </div>
-    )
+    return <Error error={error} />
   }
 
   return (
     <>
-      {loading && <p>Loading...</p>}
+      {loading && <Loading />}
       {stats && !loading && (
         <>
-          <Header />
           <StatGrid>
             <StatBlock>
               <strong>Confirmed: </strong>

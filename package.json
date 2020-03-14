@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@atlaskit/select": "^11.0.9",
     "next": "^9.3.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",

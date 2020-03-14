@@ -1,23 +1,28 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
+import Select from '@atlaskit/select'
+import styled from 'styled-components'
 
 import useStats from '../utils/useStats'
 
-const Dropdown = ({ handleCountrySelect, selectEl, stats }) => {
+const SingleSelect = styled(Select)`
+  display: inline-block;
+  margin: 1rem;
+  width: 20rem;
+`
+
+const Dropdown = ({ handleCountrySelect, stats }) => {
+  const options = Object.entries(stats.countries).map(([country, code]) => {
+    return { label: country, value: code }
+  })
+
   return (
-    <select
-      defaultValue="worldwide"
-      onChange={() => handleCountrySelect(selectEl)}
-      ref={selectEl}
-    >
-      <option key="worldwide" value="worldwide">
-        Worldwide
-      </option>
-      {Object.entries(stats.countries).map(([country, code]) => (
-        <option key={`${country}-${code}`} value={code} data-name={country}>
-          {country}
-        </option>
-      ))}
-    </select>
+    <SingleSelect
+      className="single-select"
+      classNamePrefix="react-select"
+      options={[{ label: 'Worldwide', value: 'worldwide' }, ...options]}
+      placeholder="Choose a country"
+      onChange={handleCountrySelect}
+    />
   )
 }
 
@@ -25,17 +30,11 @@ const CountrySelector = ({ handleCountrySelect }) => {
   const { stats, loading, error } = useStats(
     'https://covid19.mathdro.id/api/countries'
   )
-  const selectEl = useRef(null)
 
   return (
     <>
-      <span>Select Country: </span>
       {stats && (
-        <Dropdown
-          handleCountrySelect={handleCountrySelect}
-          selectEl={selectEl}
-          stats={stats}
-        />
+        <Dropdown handleCountrySelect={handleCountrySelect} stats={stats} />
       )}
     </>
   )

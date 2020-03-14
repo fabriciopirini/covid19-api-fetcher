@@ -24,6 +24,7 @@ const useStats = url => {
         })
       setLoading(false)
     }
+
     fetchData()
   }, [url])
 
